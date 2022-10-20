@@ -1,0 +1,61 @@
+<img src="{{asset('img/cat.jpg')}}" alt="student">
+<h1>La liste des formations de la classe {{classe}} dans la salle {{salle}}</h1>
+{%if listFormations is empty%}
+<h6>Tableau Vide<h6>
+{% else %}
+<table border="1">
+<tr>
+<th>Ref</th>
+<th>Titre</th>
+<th>Description</th>
+<th>Nb Participants</th>
+<th>Participer</th>
+</tr>
+
+{% for f in listFormations %}
+<tr>
+<td>{{f.ref}}</td>
+<td>{{f.Titre | upper}}</td>
+<td>{{f.Description}}</td>
+
+<td>{{f.nb_participants}}</td>
+
+<td>
+{% if f.nb_participants == 0 %}
+<a href="{{path('app_reservation')}}">Participer</a>
+{%else%}
+complet
+{%endif%}
+</td>
+</tr>
+{% endfor%}
+{%endif%}
+</table>
+<br>
+Les formations théoriques sont:<br>
+{% for i in listFormations %}
+{%if i.Description == 'theorique' %}
+ {{i.Titre}}
+ <br>
+{%endif%}
+{% endfor%}
+<br>
+La formation avec le plus grand nombre de participants est:<br>
+
+{% set maxValue = 0 %}
+
+{% for j in listFormations %} 
+    {% set maxValue = max(j.nb_participants, maxValue) %}
+    {%if j.nb_participants == maxValue%}
+        {{j.Titre}}
+    {%endif%}
+{% endfor %} 
+<br>
+Le nombre total des participants est:<br>
+{% set nb = 0 %}
+{% for k in listFormations %}
+{% set nb = nb + k.nb_participants %}
+{% endfor%}
+{{nb}}
+
+<h3 style="color:orange">Nb de formation = {{listFormations | length}}</h3>
